@@ -43,4 +43,9 @@ public class ProductServiceController {
         productRepo.put(product.getId(), product);
         return new ResponseEntity<>("Product is Created", HttpStatus.OK);
     }
+
+    @RequestMapping(value = "/products/{id}", method = RequestMethod.GET)
+    public ResponseEntity<Object> getProducts(@PathVariable("id") String id) {
+        return new ResponseEntity<>(null == id ? productRepo.values() : productRepo.get(id), HttpStatus.OK);
+    }
 }
