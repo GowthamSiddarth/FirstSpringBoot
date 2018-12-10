@@ -37,4 +37,10 @@ public class ProductServiceController {
         productRepo.put(id, product);
         return new ResponseEntity<>("Product is Updated", HttpStatus.OK);
     }
+
+    @RequestMapping(value = "/products", method = RequestMethod.POST)
+    public ResponseEntity<Object> create(@RequestBody Product product) {
+        productRepo.put(product.getId(), product);
+        return new ResponseEntity<>("Product is Created", HttpStatus.OK);
+    }
 }
