@@ -23,4 +23,10 @@ public class ProductServiceController {
         product2.setName("Almond");
         productRepo.put(product2.getId(), product2);
     }
+
+    @RequestMapping(value = "/products/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<Object> delete(@PathVariable("id") String id) {
+        productRepo.remove(id);
+        return new ResponseEntity<>("Product is Deleted", HttpStatus.OK);
+    }
 }
