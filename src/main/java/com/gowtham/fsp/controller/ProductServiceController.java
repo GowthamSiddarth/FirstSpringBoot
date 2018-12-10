@@ -29,4 +29,12 @@ public class ProductServiceController {
         productRepo.remove(id);
         return new ResponseEntity<>("Product is Deleted", HttpStatus.OK);
     }
+
+    @RequestMapping(value = "/products/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<Object> update(@PathVariable("id") String id, @RequestBody Product product) {
+        productRepo.remove(id);
+        product.setId(id);
+        productRepo.put(id, product);
+        return new ResponseEntity<>("Product is Updated", HttpStatus.OK);
+    }
 }
