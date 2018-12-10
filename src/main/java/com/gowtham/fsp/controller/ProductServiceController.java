@@ -46,6 +46,6 @@ public class ProductServiceController {
 
     @RequestMapping(value = "/products/{id}", method = RequestMethod.GET)
     public ResponseEntity<Object> getProducts(@PathVariable("id") String id) {
-        return new ResponseEntity<>(null == id ? productRepo.values() : productRepo.get(id), HttpStatus.OK);
+        return new ResponseEntity<>("all".equals(id) ? productRepo.values() : productRepo.get(id), HttpStatus.OK);
     }
 }
