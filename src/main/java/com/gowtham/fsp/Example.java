@@ -10,15 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @SpringBootApplication
-public class Example extends SpringBootServletInitializer {
+public class Example {
 
     @Value("${spring.application.name}")
     private String applicationName;
-
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder applicationBuilder) {
-        return applicationBuilder.sources(Example.class);
-    }
 
     @RequestMapping(path = "/")
     String home() {
