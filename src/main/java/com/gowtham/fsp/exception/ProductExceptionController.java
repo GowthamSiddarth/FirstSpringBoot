@@ -13,9 +13,3 @@ public class ProductExceptionController {
         return new ResponseEntity<>("Product Not Found", HttpStatus.NOT_FOUND);
     }
 }
-
-package com.gowtham.fsp.exception;
-
-public class ProductNotFoundException extends RuntimeException {
-}
-
