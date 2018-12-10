@@ -1,5 +1,6 @@
 package com.gowtham.fsp.controller;
 
+import com.gowtham.fsp.exception.ProductNotFoundException;
 import com.gowtham.fsp.model.Product;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,12 +27,20 @@ public class ProductServiceController {
 
     @RequestMapping(value = "/products/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<Object> delete(@PathVariable("id") String id) {
+        if (!productRepo.containsKey(id)) {
+            throw new ProductNotFoundException();
+        }
+
         productRepo.remove(id);
         return new ResponseEntity<>("Product is Deleted", HttpStatus.OK);
     }
 
     @RequestMapping(value = "/products/{id}", method = RequestMethod.PUT)
     public ResponseEntity<Object> update(@PathVariable("id") String id, @RequestBody Product product) {
+        if (!productRepo.containsKey(id)) {
+            throw new ProductNotFoundException();
+        }
+
         productRepo.remove(id);
         product.setId(id);
         productRepo.put(id, product);
@@ -46,6 +55,10 @@ public class ProductServiceController {
 
     @RequestMapping(value = "/products/{id}", method = RequestMethod.GET)
     public ResponseEntity<Object> getProducts(@PathVariable("id") String id) {
+        if (!productRepo.containsKey(id) && !"all".equals(id)) {
+            throw new ProductNotFoundException();
+        }
+
         return new ResponseEntity<>("all".equals(id) ? productRepo.values() : productRepo.get(id), HttpStatus.OK);
     }
 }
