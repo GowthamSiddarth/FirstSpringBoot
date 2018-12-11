@@ -1,5 +1,6 @@
 package com.gowtham.fsp.controller;
 
+import com.gowtham.fsp.exception.ProductAlreadyExistsException;
 import com.gowtham.fsp.exception.ProductNotFoundException;
 import com.gowtham.fsp.model.Product;
 import org.springframework.http.HttpStatus;
@@ -49,6 +50,9 @@ public class ProductServiceController {
 
     @RequestMapping(value = "/products", method = RequestMethod.POST)
     public ResponseEntity<Object> create(@RequestBody Product product) {
+        if (productRepo.containsKey(product.getId())) {
+            throw new ProductAlreadyExistsException();
+        }
         productRepo.put(product.getId(), product);
         return new ResponseEntity<>("Product is Created", HttpStatus.OK);
     }
