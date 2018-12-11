@@ -1,14 +1,12 @@
 package com.gowtham.fsp.controller;
 
+import com.gowtham.fsp.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
@@ -27,6 +25,20 @@ public class ConsumeWebService {
 
         return restTemplate.exchange(
                 "http://localhost:9999/products/" + id, HttpMethod.GET, entity, String.class).getBody();
+    }
+
+    @RequestMapping(value = "/v1/products/{id}", method = RequestMethod.PUT)
+    public String updateProduct(@PathVariable("id") String id, @RequestBody Product product) {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        HttpEntity<String> entity = new HttpEntity<>(httpHeaders);
+
+        try {
+            return restTemplate.exchange(
+                    "http://localhost:9999/products/" + id, HttpMethod.PUT, entity, String.class).getBody();
+        } catch (HttpClientErrorException ex) {
+            return ex.getResponseBodyAsString();
+        }
     }
 
     @RequestMapping(value = "/v1/products/{id}", method = RequestMethod.DELETE)
