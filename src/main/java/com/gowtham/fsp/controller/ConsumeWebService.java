@@ -17,6 +17,16 @@ public class ConsumeWebService {
     @Autowired
     RestTemplate restTemplate;
 
+    @RequestMapping(value = "/v1/products", method = RequestMethod.POST)
+    public String createProduct(@RequestBody Product product) {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        HttpEntity<Product> entity = new HttpEntity<>(product, httpHeaders);
+
+        return restTemplate.exchange(
+                "http://localhost:9999/products", HttpMethod.POST, entity, String.class).getBody();
+    }
+
     @RequestMapping(value = "/v1/products/{id}")
     public String getProducts(@PathVariable("id") String id) {
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -31,7 +41,7 @@ public class ConsumeWebService {
     public String updateProduct(@PathVariable("id") String id, @RequestBody Product product) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-        HttpEntity<String> entity = new HttpEntity<>(httpHeaders);
+        HttpEntity<Product> entity = new HttpEntity<>(product, httpHeaders);
 
         try {
             return restTemplate.exchange(
