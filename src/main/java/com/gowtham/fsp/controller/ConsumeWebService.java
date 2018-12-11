@@ -33,8 +33,13 @@ public class ConsumeWebService {
         httpHeaders.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         HttpEntity<String> entity = new HttpEntity<>(httpHeaders);
 
-        return restTemplate.exchange(
-                "http://localhost:9999/products/" + id, HttpMethod.GET, entity, String.class).getBody();
+        try {
+            return restTemplate.exchange(
+                    "http://localhost:9999/products/" + id, HttpMethod.GET, entity, String.class).getBody();
+        } catch (HttpClientErrorException ex) {
+            return ex.getResponseBodyAsString();
+        }
+
     }
 
     @RequestMapping(value = "/v1/products/{id}", method = RequestMethod.PUT)
