@@ -7,7 +7,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
@@ -25,5 +27,19 @@ public class ConsumeWebService {
 
         return restTemplate.exchange(
                 "http://localhost:9999/products/" + id, HttpMethod.GET, entity, String.class).getBody();
+    }
+
+    @RequestMapping(value = "/v1/products/{id}", method = RequestMethod.DELETE)
+    public String deleteProduct(@PathVariable("id") String id) {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        HttpEntity<String> entity = new HttpEntity<>(httpHeaders);
+
+        try {
+            return restTemplate.exchange(
+                    "http://localhost:9999/products/" + id, HttpMethod.DELETE, entity, String.class).getBody();
+        } catch (HttpClientErrorException ex) {
+            return ex.getResponseBodyAsString();
+        }
     }
 }
