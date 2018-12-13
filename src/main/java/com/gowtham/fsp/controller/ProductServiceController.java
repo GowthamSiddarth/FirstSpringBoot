@@ -4,9 +4,15 @@ import com.gowtham.fsp.exception.ProductAlreadyExistsException;
 import com.gowtham.fsp.exception.ProductNotFoundException;
 import com.gowtham.fsp.model.Product;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -64,5 +70,15 @@ public class ProductServiceController {
         }
 
         return new ResponseEntity<>("all".equals(id) ? productRepo.values() : productRepo.get(id), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/products/upload", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Object> fileUpload(@RequestParam("file") MultipartFile multipartFile) throws IOException {
+        File file = new File("D:/IntelliJProjects/fsp/src/main/resources/" + multipartFile.getOriginalFilename());
+        file.createNewFile();
+        FileOutputStream fileOutputStream = new FileOutputStream(file);
+        fileOutputStream.write(multipartFile.getBytes());
+        fileOutputStream.close();
+        return new ResponseEntity<>("File Uploaded", HttpStatus.OK);
     }
 }
