@@ -104,7 +104,7 @@ public class ConsumeWebService {
             return ex.getResponseBodyAsString();
         }
     }
-    /*
+
     @RequestMapping(value = "/v1/products/image/download", method = RequestMethod.POST)
     public String downloadFile(@RequestBody Map<String, Object> body) {
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -118,5 +118,4 @@ public class ConsumeWebService {
             return ex.getResponseBodyAsString();
         }
     }
-    */
 }
