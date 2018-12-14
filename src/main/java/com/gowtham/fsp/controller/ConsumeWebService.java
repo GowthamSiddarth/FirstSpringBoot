@@ -21,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.Map;
 
 @RestController
 public class ConsumeWebService {
@@ -84,24 +85,38 @@ public class ConsumeWebService {
         }
     }
 
-    @RequestMapping(value = "/v1/products/upload", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @RequestMapping(value = "/v1/products/image/upload", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public String uploadFile(@RequestParam("file") MultipartFile multipartFile) {
         try {
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.setAccept(Arrays.asList(MediaType.MULTIPART_FORM_DATA));
             MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-            File tempFile = new File(new File(System.getProperty("java.io.tmpdir")), multipartFile.getOriginalFilename());
-            tempFile.createNewFile();
-            body.add("file", new FileSystemResource(tempFile));
+            FileSystemResource fileSystemResource = new FileSystemResource(new File("D:/IntelliJProjects/fsp/src/main/resources/" + multipartFile.getOriginalFilename()));
+            //File tempFile = new File(new File(System.getProperty("java.io.tmpdir")), multipartFile.getOriginalFilename());
+            //tempFile.createNewFile();
+            body.add("file", fileSystemResource);
             HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(body, httpHeaders);
 
             return restTemplate.exchange(
-                    "http://localhost:9999/products/upload", HttpMethod.POST, entity, String.class).getBody();
+                    "http://localhost:9999/products/image/upload", HttpMethod.POST, entity, String.class).getBody();
         } catch (HttpClientErrorException ex) {
             ex.printStackTrace();
             return ex.getResponseBodyAsString();
-        } catch (IOException ex) {
-            return ex.getMessage();
         }
     }
+    /*
+    @RequestMapping(value = "/v1/products/image/download", method = RequestMethod.POST)
+    public String downloadFile(@RequestBody Map<String, Object> body) {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, httpHeaders);
+
+        try {
+            return restTemplate.exchange(
+                    "http://localhost:9999/products/image/download", HttpMethod.POST, entity, String.class).getBody();
+        } catch (HttpClientErrorException ex) {
+            return ex.getResponseBodyAsString();
+        }
+    }
+    */
 }
