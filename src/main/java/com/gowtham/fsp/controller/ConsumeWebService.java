@@ -116,16 +116,18 @@ public class ConsumeWebService {
     }
 
     @RequestMapping(value = "/v1/products/image/download", method = RequestMethod.POST)
-    public String downloadFile(@RequestBody Map<String, Object> body) {
+    public byte[] downloadFile(@RequestBody Map<String, Object> body) {
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        httpHeaders.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM));
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, httpHeaders);
 
         try {
             return restTemplate.exchange(
-                    "http://localhost:9999/products/image/download", HttpMethod.POST, entity, String.class).getBody();
+                    "http://localhost:9999/products/image/download", HttpMethod.POST, entity, byte[].class).getBody();
         } catch (HttpClientErrorException ex) {
-            return ex.getResponseBodyAsString();
+            ex.printStackTrace();
+            ex.getResponseBodyAsString();
+            return null;
         }
     }
 }
