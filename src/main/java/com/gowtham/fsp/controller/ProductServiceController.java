@@ -74,7 +74,7 @@ public class ProductServiceController {
         return new ResponseEntity<>("all".equals(id) ? productRepo.values() : productRepo.get(id), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/products/image/upload", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @RequestMapping(value = "/products/file/upload", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Object> uploadFile(@RequestParam("file") MultipartFile multipartFile) throws IOException {
         File file = new File("D:/IntelliJProjects/fsp/src/main/resources/" + multipartFile.getOriginalFilename());
         file.createNewFile();
@@ -84,7 +84,7 @@ public class ProductServiceController {
         return new ResponseEntity<>("File Uploaded", HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/products/image/download", method = RequestMethod.POST)
+    @RequestMapping(value = "/products/file/download", method = RequestMethod.POST)
     public ResponseEntity<Object> downloadFile(@RequestBody Map<String, Object> payload) throws IOException {
         System.out.println(payload.get("filename"));
         File file = new File("D:/IntelliJProjects/fsp/src/main/resources/" + payload.get("filename"));
