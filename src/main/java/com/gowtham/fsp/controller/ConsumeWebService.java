@@ -83,7 +83,7 @@ public class ConsumeWebService {
         }
     }
 
-    @RequestMapping(value = "/v1/products/image/upload", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @RequestMapping(value = "/v1/products/file/upload", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public String uploadFile(@RequestParam("file") MultipartFile multipartFile) {
         try {
             HttpHeaders httpHeaders = new HttpHeaders();
@@ -102,20 +102,17 @@ public class ConsumeWebService {
             HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(body, httpHeaders);
 
             return restTemplate.exchange(
-                    "http://localhost:9999/products/image/upload", HttpMethod.POST, entity, String.class).getBody();
+                    "http://localhost:9999/products/file/upload", HttpMethod.POST, entity, String.class).getBody();
         } catch (HttpClientErrorException ex) {
             ex.printStackTrace();
             return ex.getResponseBodyAsString();
-        } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
-            return ex.getMessage();
         } catch (IOException ex) {
             ex.printStackTrace();
             return ex.getMessage();
         }
     }
 
-    @RequestMapping(value = "/v1/products/image/download", method = RequestMethod.POST)
+    @RequestMapping(value = "/v1/products/file/download", method = RequestMethod.POST)
     public byte[] downloadFile(@RequestBody Map<String, Object> body) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM));
@@ -123,11 +120,11 @@ public class ConsumeWebService {
 
         try {
             return restTemplate.exchange(
-                    "http://localhost:9999/products/image/download", HttpMethod.POST, entity, byte[].class).getBody();
+                    "http://localhost:9999/products/file/download", HttpMethod.POST, entity, byte[].class).getBody();
         } catch (HttpClientErrorException ex) {
             ex.printStackTrace();
             ex.getResponseBodyAsString();
-            return null;
+            return "File not found in server".getBytes();
         }
     }
 }
