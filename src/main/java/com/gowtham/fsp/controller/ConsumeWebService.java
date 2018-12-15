@@ -2,7 +2,6 @@ package com.gowtham.fsp.controller;
 
 import com.gowtham.fsp.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -16,11 +15,10 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.Map;
 
 @RestController
@@ -90,10 +88,16 @@ public class ConsumeWebService {
         try {
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.setAccept(Arrays.asList(MediaType.MULTIPART_FORM_DATA));
+
+            String tempFileName = System.getProperty("java.io.tmpdir") + multipartFile.getOriginalFilename();
+            File tempFile = new File(tempFileName);
+            FileOutputStream fileOutputStream = new FileOutputStream(tempFile);
+            fileOutputStream.write(multipartFile.getBytes());
+            fileOutputStream.close();
+
+            FileSystemResource fileSystemResource = new FileSystemResource(tempFileName);
+
             MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-            FileSystemResource fileSystemResource = new FileSystemResource(new File("D:/IntelliJProjects/fsp/src/main/resources/" + multipartFile.getOriginalFilename()));
-            //File tempFile = new File(new File(System.getProperty("java.io.tmpdir")), multipartFile.getOriginalFilename());
-            //tempFile.createNewFile();
             body.add("file", fileSystemResource);
             HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(body, httpHeaders);
 
@@ -102,6 +106,12 @@ public class ConsumeWebService {
         } catch (HttpClientErrorException ex) {
             ex.printStackTrace();
             return ex.getResponseBodyAsString();
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+            return ex.getMessage();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return ex.getMessage();
         }
     }
 
