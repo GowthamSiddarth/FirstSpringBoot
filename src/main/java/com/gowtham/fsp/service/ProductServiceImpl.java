@@ -5,10 +5,12 @@ import com.gowtham.fsp.exception.ProductNotFoundException;
 import com.gowtham.fsp.model.Product;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Service
 public class ProductServiceImpl implements ProductService {
     private static Map<String, Product> productRepo = new HashMap<>();
 
