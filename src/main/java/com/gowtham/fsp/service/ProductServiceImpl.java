@@ -1,6 +1,7 @@
 package com.gowtham.fsp.service;
 
 import com.gowtham.fsp.exception.ProductAlreadyExistsException;
+import com.gowtham.fsp.exception.ProductNotFoundException;
 import com.gowtham.fsp.model.Product;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +35,11 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ResponseEntity<Object> getProduct(String id) {
-        return null;
+        if (!productRepo.containsKey(id) && !"all".equals(id)) {
+            throw new ProductNotFoundException();
+        }
+
+        return new ResponseEntity<>("all".equals(id) ? productRepo.values() : productRepo.get(id), HttpStatus.OK);
     }
 
     @Override
