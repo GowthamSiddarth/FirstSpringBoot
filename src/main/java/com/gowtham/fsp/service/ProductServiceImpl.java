@@ -44,7 +44,14 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ResponseEntity<Object> updateProduct(String id, Product product) {
-        return null;
+        if (!productRepo.containsKey(id)) {
+            throw new ProductNotFoundException();
+        }
+
+        productRepo.remove(id);
+        product.setId(id);
+        productRepo.put(id, product);
+        return new ResponseEntity<>("Product is Updated", HttpStatus.OK);
     }
 
     @Override
