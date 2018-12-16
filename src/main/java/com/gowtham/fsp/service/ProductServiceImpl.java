@@ -56,6 +56,11 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ResponseEntity<Object> deleteProduct(String id) {
-        return null;
+        if (!productRepo.containsKey(id)) {
+            throw new ProductNotFoundException();
+        }
+
+        productRepo.remove(id);
+        return new ResponseEntity<>("Product is Deleted", HttpStatus.OK);
     }
 }
