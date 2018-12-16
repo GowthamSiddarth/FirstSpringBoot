@@ -1,8 +1,8 @@
 package com.gowtham.fsp.controller;
 
-import com.gowtham.fsp.exception.ProductAlreadyExistsException;
-import com.gowtham.fsp.exception.ProductNotFoundException;
 import com.gowtham.fsp.model.Product;
+import com.gowtham.fsp.service.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -15,63 +15,31 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 @RestController
 public class ProductServiceController {
-    private static Map<String, Product> productRepo = new HashMap<>();
-
-    static {
-        Product product1 = new Product();
-        product1.setId("1");
-        product1.setName("Honey");
-        productRepo.put(product1.getId(), product1);
-
-        Product product2 = new Product();
-        product2.setId("2");
-        product2.setName("Almond");
-        productRepo.put(product2.getId(), product2);
-    }
+    @Autowired
+    ProductService productService;
 
     @RequestMapping(value = "/products/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<Object> deleteProduct(@PathVariable("id") String id) {
-        if (!productRepo.containsKey(id)) {
-            throw new ProductNotFoundException();
-        }
-
-        productRepo.remove(id);
-        return new ResponseEntity<>("Product is Deleted", HttpStatus.OK);
+        return productService.deleteProduct(id);
     }
 
     @RequestMapping(value = "/products/{id}", method = RequestMethod.PUT)
     public ResponseEntity<Object> updateProduct(@PathVariable("id") String id, @RequestBody Product product) {
-        if (!productRepo.containsKey(id)) {
-            throw new ProductNotFoundException();
-        }
-
-        productRepo.remove(id);
-        product.setId(id);
-        productRepo.put(id, product);
-        return new ResponseEntity<>("Product is Updated", HttpStatus.OK);
+        return productService.updateProduct(id, product);
     }
 
     @RequestMapping(value = "/products", method = RequestMethod.POST)
     public ResponseEntity<Object> createProduct(@RequestBody Product product) {
-        if (productRepo.containsKey(product.getId())) {
-            throw new ProductAlreadyExistsException();
-        }
-        productRepo.put(product.getId(), product);
-        return new ResponseEntity<>("Product is Created", HttpStatus.OK);
+        return productService.createProduct(product);
     }
 
     @RequestMapping(value = "/products/{id}", method = RequestMethod.GET)
     public ResponseEntity<Object> getProducts(@PathVariable("id") String id) {
-        if (!productRepo.containsKey(id) && !"all".equals(id)) {
-            throw new ProductNotFoundException();
-        }
-
-        return new ResponseEntity<>("all".equals(id) ? productRepo.values() : productRepo.get(id), HttpStatus.OK);
+        return productService.getProduct(id);
     }
 
     @RequestMapping(value = "/products/file/upload", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
