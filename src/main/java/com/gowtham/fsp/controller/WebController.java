@@ -10,4 +10,9 @@ public class WebController {
     public String index() {
         return "index";
     }
+
+    @RequestMapping(value = "/view-products")
+    public String viewProducts() {
+        return "view-products";
+    }
 }
