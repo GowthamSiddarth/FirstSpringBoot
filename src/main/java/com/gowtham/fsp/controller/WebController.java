@@ -15,4 +15,9 @@ public class WebController {
     public String viewProducts() {
         return "view-products";
     }
+
+    @RequestMapping(value = "/add-product")
+    public String addProduct() {
+        return "add-product";
+    }
 }
