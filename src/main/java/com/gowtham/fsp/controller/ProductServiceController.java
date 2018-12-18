@@ -44,12 +44,7 @@ public class ProductServiceController {
 
     @RequestMapping(value = "/products/file/upload", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Object> uploadFile(@RequestParam("file") MultipartFile multipartFile) throws IOException {
-        File file = new File("D:/IntelliJProjects/fsp/src/main/resources/" + multipartFile.getOriginalFilename());
-        file.createNewFile();
-        FileOutputStream fileOutputStream = new FileOutputStream(file);
-        fileOutputStream.write(multipartFile.getBytes());
-        fileOutputStream.close();
-        return new ResponseEntity<>("File Uploaded", HttpStatus.OK);
+        return productService.uploadFile(multipartFile);
     }
 
     @RequestMapping(value = "/products/file/download", method = RequestMethod.POST)
