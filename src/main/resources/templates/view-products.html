@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Spring Boot Application</title>
+    <script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $.getJSON("http://localhost:9999/v1/products/all", function (result) {
+                $.each(result, function(key, value) {
+                    $("#products").append(value.id + " " + value.name + "<br/>");
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <div id="products"></div>
+</body>
+</html>
