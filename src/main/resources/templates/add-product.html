@@ -12,10 +12,8 @@
                 $.ajax({
                     type: "POST",
                     url: "http://localhost:9999/v1/products",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    processData: false,
+                    contentType: 'application/json',
+                    dataType: 'json',
                     data: {id: id, name: name},
                     success: function(data) {
                         alert(data);
