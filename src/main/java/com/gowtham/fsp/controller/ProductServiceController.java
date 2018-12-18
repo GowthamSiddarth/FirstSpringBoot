@@ -49,17 +49,6 @@ public class ProductServiceController {
 
     @RequestMapping(value = "/products/file/download", method = RequestMethod.POST)
     public ResponseEntity<Object> downloadFile(@RequestBody Map<String, Object> payload) throws IOException {
-        System.out.println(payload.get("filename"));
-        File file = new File("D:/IntelliJProjects/fsp/src/main/resources/" + payload.get("filename"));
-        InputStreamResource inputStreamResource = new InputStreamResource(new FileInputStream(file));
-
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("Content-Disposition", String.format("attachment; filename=\"%s\"", payload.get("filename")));
-        httpHeaders.add("Cache-Control", "no-cache, no-store, must-revalidate");
-        httpHeaders.add("Pragma", "no-cache");
-        httpHeaders.add("Expires", "0");
-
-        return ResponseEntity.ok().headers(httpHeaders).contentLength(file.length())
-                .contentType(MediaType.parseMediaType("application/txt")).body(inputStreamResource);
+        return productService.downloadFile(payload);
     }
 }

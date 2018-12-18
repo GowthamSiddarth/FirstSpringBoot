@@ -3,12 +3,16 @@ package com.gowtham.fsp.service;
 import com.gowtham.fsp.exception.ProductAlreadyExistsException;
 import com.gowtham.fsp.exception.ProductNotFoundException;
 import com.gowtham.fsp.model.Product;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
@@ -81,7 +85,17 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ResponseEntity<Object> downloadFile(Map<String, Object> payload) {
-        return null;
+    public ResponseEntity<Object> downloadFile(Map<String, Object> payload) throws IOException {
+        File file = new File("D:/IntelliJProjects/fsp/src/main/resources/" + payload.get("filename"));
+        InputStreamResource inputStreamResource = new InputStreamResource(new FileInputStream(file));
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Content-Disposition", String.format("attachment; filename=\"%s\"", payload.get("filename")));
+        httpHeaders.add("Cache-Control", "no-cache, no-store, must-revalidate");
+        httpHeaders.add("Pragma", "no-cache");
+        httpHeaders.add("Expires", "0");
+
+        return ResponseEntity.ok().headers(httpHeaders).contentLength(file.length())
+                .contentType(MediaType.parseMediaType("application/txt")).body(inputStreamResource);
     }
 }

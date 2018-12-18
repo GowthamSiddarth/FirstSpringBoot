@@ -13,5 +13,5 @@ public interface ProductService {
     ResponseEntity<Object> updateProduct(String id, Product product);
     ResponseEntity<Object> deleteProduct(String id);
     ResponseEntity<Object> uploadFile(MultipartFile multipartFile) throws IOException;
-    ResponseEntity<Object> downloadFile(Map<String, Object> payload);
+    ResponseEntity<Object> downloadFile(Map<String, Object> payload) throws IOException;
 }
