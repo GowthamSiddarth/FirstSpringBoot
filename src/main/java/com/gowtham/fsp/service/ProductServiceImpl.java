@@ -6,6 +6,7 @@ import com.gowtham.fsp.model.Product;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -64,5 +65,15 @@ public class ProductServiceImpl implements ProductService {
 
         productRepo.remove(id);
         return new ResponseEntity<>("Product is Deleted", HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<Object> uploadFile(MultipartFile multipartFile) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<Object> downloadFile(Map<String, Object> payload) {
+        return null;
     }
 }
