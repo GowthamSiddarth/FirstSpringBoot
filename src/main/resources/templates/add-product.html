@@ -9,15 +9,18 @@
             $("#addProductForm").submit(function (event) {
                 var id = $("#productId").val();
                 var name = $("#productName").val();
+                var productModel = {id: id, name: name};
+                var data = JSON.stringify(productModel);
+                console.log(data);
                 $.ajax({
                     type: "POST",
                     url: "http://localhost:9999/v1/products",
                     contentType: 'application/json',
                     dataType: 'json',
-                    data: {id: id, name: name},
+                    data: data,
                     success: function(data) {
                         alert(data);
-                    }
+                    },
                     error: function(data) {
                         alert(data);
                     }
